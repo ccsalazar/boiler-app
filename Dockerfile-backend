@@ -1,0 +1,25 @@
+# Use the official Python 3.9 image as a base for the backend
+FROM python:3.9
+
+# Set the working directory in the container
+WORKDIR /app
+
+# Copy the backend application code to the working directory
+COPY my-backend-app/ ./
+
+# Install Python dependencies
+RUN pip install --no-cache-dir -r requirements.txt
+
+# Configure Python logging to print to stdout
+ENV PYTHONUNBUFFERED=TRUE
+ENV PYTHONDONTWRITEBYTECODE=TRUE
+ENV PYTHONPATH=/app
+
+# # Copy the Nginx configuration file to the container
+# COPY nginx.conf-backend /etc/nginx/conf.d/default.conf
+
+# Expose port 5000 to the outside world
+EXPOSE 5000
+
+# Command to run the backend application
+CMD ["python", "app.py"]

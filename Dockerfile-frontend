@@ -1,0 +1,38 @@
+# Use the official Node.js 14 image as a base for the frontend
+FROM node:18 AS builder
+
+# Set the working directory in the container
+WORKDIR /app
+
+# Copy package.json and package-lock.json to the working directory
+COPY my-frontend-app/package.json my-frontend-app/package-lock.json ./
+
+# Install dependencies
+RUN npm install --production
+
+# Copy the rest of the frontend application code to the working directory
+COPY my-frontend-app ./
+
+# Build the frontend application
+RUN npm run build
+
+EXPOSE 3000
+
+CMD ["npm", "run", "start"]
+# # Use Nginx as a lightweight server for the frontend
+# FROM nginx:alpine
+
+# # Remove default Nginx website
+# RUN rm -rf /usr/share/nginx/html/*
+
+# # Copy the build output from the previous stage to the Nginx directory
+# COPY --from=builder /app/.next /usr/share/nginx/html
+
+# # Copy the Nginx configuration file to the container
+# COPY nginx.conf-frontend /etc/nginx/conf.d/default.conf
+
+# # Expose port 80 to the outside world
+# EXPOSE 80
+
+# # Command to run Nginx in the foreground
+# CMD ["nginx", "-g", "daemon off;"]
